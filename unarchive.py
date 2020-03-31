@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 
-import argparse
 import os
 import sys
 import shutil
@@ -47,6 +46,8 @@ def cli():
     """
     Command line interface
     """
+
+    import argparse
 
     note = 'The archive can be in one of the following archive formats: '
     for s, t in shutil.get_archive_formats(): note += s + ' (' + t + '), '
