@@ -22,15 +22,10 @@ def guess_file_extension(file):
     m = magic.from_file(file, mime=True)
     ext = mimetypes.guess_extension(m)
 
-    print(f'DEBUG: m = {m}')
-    print(f'DEBUG: ext = {ext}')
-
     # mimetypes.guess_extensions often fails (at least with archives) so here
     # are some guess from personal tests (not reliable but better than nothing).
     ext = '.zip' if (not ext and m == 'application/zip') else ext
     ext = '.tar.gz' if (not ext and m == 'application/gzip') else ext
-
-    print(f'DEBUG: ext = {ext}')
 
     if not ext:
         raise RuntimeError(f'Could not guess the extension of file {file}')
