@@ -5,6 +5,39 @@ import sys
 import shutil
 
 
+def guess_file_extension(file):
+    """
+    Guess the extension of a file using libmagic
+
+    Args:
+        file (str): file path
+
+    Returns:
+        ext (str): guessed file extension (with leading ".")
+    """
+
+    import magic
+    import mimetypes
+
+    m = magic.from_file(file, mime=True)
+    ext = mimetypes.guess_extension(m)
+
+    print(f'DEBUG: m = {m}')
+    print(f'DEBUG: ext = {ext}')
+
+    # mimetypes.guess_extensions often fails (at least with archives) so here
+    # are some guess from personal tests (not reliable but better than nothing).
+    ext = '.zip' if (not ext and m == 'application/zip') else ext
+    ext = '.tar.gz' if (not ext and m == 'application/gzip') else ext
+
+    print(f'DEBUG: ext = {ext}')
+
+    if not ext:
+        raise RuntimeError(f'Could not guess the extension of file {file}')
+
+    return ext
+
+
 def get_from_archive(archive,
                      accepted_formats,
                      extract_dir='unpacked',
@@ -20,6 +53,15 @@ def get_from_archive(archive,
     Returns:
         list of paths of the files found
     """
+
+
+    assert os.path.exists(archive), f'The file {archive} does not exist.'
+
+    if not os.path.splitext(archive)[1]:  # the archive has no extension
+        ext = guess_file_extension(archive)
+        shutil.copyfile(archive, 'tmp' + ext)
+        archive = 'tmp' + ext
+        print(f'Guessed file extension: {ext}')
 
     shutil.unpack_archive(archive, extract_dir=extract_dir)
 
