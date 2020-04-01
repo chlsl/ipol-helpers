@@ -26,6 +26,7 @@ def guess_file_extension(file):
     # are some guess from personal tests (not reliable but better than nothing).
     ext = '.zip' if (not ext and m == 'application/zip') else ext
     ext = '.tar.gz' if (not ext and m == 'application/gzip') else ext
+    ext = '.tar.gz' if ext == '.gz' else ext  # might cause errors for true gz?
 
     if not ext:
         raise RuntimeError(f'Could not guess the extension of file {file}')
