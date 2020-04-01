@@ -49,7 +49,6 @@ def get_from_archive(archive,
         list of paths of the files found
     """
 
-
     assert os.path.exists(archive), f'The file {archive} does not exist.'
 
     if not os.path.splitext(archive)[1]:  # the archive has no extension
@@ -60,9 +59,11 @@ def get_from_archive(archive,
 
     shutil.unpack_archive(archive, extract_dir=extract_dir)
 
+    accepted_formats = tuple(x.lower() for x in accepted_formats)
+
     files = [os.path.join(root, f)
              for root, dirs, files in os.walk(extract_dir)
-             for f in files if f.endswith(accepted_formats)]
+             for f in files if f.lower().endswith(accepted_formats)]
     files.sort()
 
     if rename:
