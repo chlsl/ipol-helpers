@@ -34,16 +34,22 @@ def guess_file_extension(file):
 
 
 def get_from_archive(archive,
-                     accepted_formats,
+                     accepted_formats=['.tif', '.tiff'],
                      extract_dir='unpacked',
                      rename=False):
     """
     Get files from archive
 
     Args:
-        archive: (str) archive path
-        accepted_formats: (list of str) list of accepted formats
-        unpacked: (str) directory in which archive is extracted
+        archive: (str) archive path. Archives without extensions are handled.
+        accepted_formats: (list/tuple of str) list of accepted formats. It is
+                better (but not mandatory) to include the leading dot.
+                Comparison is case insensitive, so only the lowercase (or
+                uppercase) version is needed. Default is ['.tif', '.tiff'].
+        unpacked: (str) directory in which the archive is extracted.
+                Default is 'unpacked'.
+        rename: (bool) rename files with tricky names, e.g. with spaces or
+                parenthesis. Default is False.
 
     Returns:
         list of paths of the files found
@@ -102,9 +108,8 @@ def cli():
 
     a = p.parse_args()
 
-    accepted_formats = (
-            '.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.tif', '.tiff',
-            '.JPG', '.JPEG', '.PNG', '.PPM', '.BMP', '.TIF', '.TIFF')
+    accepted_formats = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.tif',
+                        '.tiff']
 
     files = get_from_archive(archive=a.archive,
                              accepted_formats=accepted_formats,
