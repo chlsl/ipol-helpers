@@ -71,11 +71,16 @@ def get_from_archive(archive,
     files = [os.path.join(root, f)
              for root, dirs, files in os.walk(extract_dir)
              for f in files if f.lower().endswith(accepted_formats)]
+
+    # remove hidden files (start by a dot)
+    files = [f for f in files if not os.path.basename(f).startswith('.')]
+
+    # sort them, so that the user can give files in a specific order
     files.sort()
 
     if rename:
         for n, i in enumerate(files):
-            j = i.replace(' ', '_')  # remove spaces
+            j = i.replace(' ', '_')  # replace spaces
             j = j.replace('(', '').replace(')', '')  # remove parentheses
             if j != i:  # filename has been modified
                 while os.path.exists(j):
