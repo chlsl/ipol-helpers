@@ -26,6 +26,8 @@ def tonemap(images, outdir='.', append='', outext='.png', pctbot=.5, pcttop=.5):
         (list of str) list of names of the output images.
     """
 
+    images = [images] if not isinstance(images, list) else images
+
     out = [os.path.join(outdir, os.path.splitext(os.path.basename(i))[0]
            + append + outext) for i in images]
     ims = [iio.read(i).astype(np.float) for i in images]
