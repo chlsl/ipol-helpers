@@ -58,7 +58,11 @@ def get_from_archive(archive,
 
     assert os.path.exists(archive), f'The file {archive} does not exist.'
 
-    if not os.path.splitext(archive)[1]:  # the archive has no extension
+    ext = os.path.splitext(archive)[1]
+
+    if ext == '.whatever' or ext == '.data': ext = None  # ipol's fake ext
+
+    if not ext:  # the archive has no extension
         ext = guess_file_extension(archive)
         shutil.copyfile(archive, 'tmp' + ext)
         archive = 'tmp' + ext
