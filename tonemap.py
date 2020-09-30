@@ -6,7 +6,8 @@ import iio
 import numpy as np
 
 
-def tonemap(images, outdir='.', append='', outext='.png', pctbot=.5, pcttop=.5):
+def tonemap(images, outdir='.', append='', outext='.png', pctbot=.5, pcttop=.5,
+            method='med-mad'):
     """
     Apply a basic tone-mapping and save the images in the specified format.
 
@@ -32,10 +33,18 @@ def tonemap(images, outdir='.', append='', outext='.png', pctbot=.5, pcttop=.5):
            + append + outext) for i in images]
     ims = [iio.read(i).astype(np.float) for i in images]
     lum = [np.mean(i, axis=2) for i in ims]
-    pct = [(np.percentile(i, pctbot),
-            np.percentile(i, 100 - pcttop)) for i in lum]
-    ims = [np.clip(255*(i - p[0])/(p[1] - p[0]), 0, 255).astype(np.uint8)
-           for p, i in zip(pct, ims)]
+
+    if method == 'med-mad':
+        med = [np.median(l) for l in lum]
+        mad = [np.median(np.abs(l - m)) for l, m in zip(lum, med)]
+        ims = [np.clip(np.round(255 * ((i - m) / (n * 6) + 0.5)),
+                0, 255).astype(np.uint8) for i, m, n in zip(ims, med, mad)]
+
+    else:
+        pct = [(np.percentile(i, pctbot),
+                np.percentile(i, 100 - pcttop)) for i in lum]
+        ims = [np.clip(np.round(255 * (i - p[0]) / (p[1] - p[0])),
+                0, 255).astype(np.uint8) for p, i in zip(pct, ims)]
 
     for i, o in zip(ims, out):
         iio.write(o, i)
