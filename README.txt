@@ -40,3 +40,14 @@ undocumented_ddl.txt
 
 Features not officially documented.
 
+demo-system-structure.txt
+-------------------------
+
+[work in progress]
+
+Files hierarchy.
+If you're wondering were IPOL move your files in the "move" sections, or if
+your "run.sh" can't find the executable, you may want to have a better idea of
+how files are organized.
+
+
