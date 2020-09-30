@@ -22,3 +22,21 @@ The tonemap script
 - maps the dynamic of each input to [0, 255] by clipping 0.5% on each side
 - saves it in the specified format (png by default).
 
+
+
+Notes and documentation
+=======================
+
+Memos about the ipol demo system, and documentation for features and behaviors
+missing in the official documentation.
+
+official_documentation.txt
+--------------------------
+
+Useful links.
+
+undocumented_ddl.txt
+--------------------
+
+Features not officially documented.
+
