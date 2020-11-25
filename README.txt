@@ -40,6 +40,11 @@ undocumented_ddl.txt
 
 Features not officially documented.
 
+hidden_features.txt
+-------------------
+
+Features not officially documented, available from the run.sh
+
 demo-system-structure.txt
 -------------------------
 
