@@ -22,6 +22,10 @@ The tonemap script
 - maps the dynamic of each input to [0, 255] by clipping 0.5% on each side
 - saves it in the specified format (png by default).
 
+democli.py
+----------
+
+Upload a ddl file and demoextras archive to the demo system. Requires to be logged to the system from firefox.
 
 
 Notes and documentation
