@@ -34,29 +34,19 @@ Notes and documentation
 Memos about the ipol demo system, and documentation for features and behaviors
 missing in the official documentation.
 
-official_documentation.txt
---------------------------
+- [official documentation](documentation/official_documentation.md)
+  Useful links.
 
-Useful links.
+- [undocumented ddl](documentation/undocumented_ddl.md)
+  Features not officially documented.
 
-undocumented_ddl.txt
---------------------
+- [hidden features](documentation/hidden_features.md)
+  Features not officially documented, available from the run.sh
 
-Features not officially documented.
-
-hidden_features.txt
--------------------
-
-Features not officially documented, available from the run.sh
-
-demo-system-structure.txt
--------------------------
-
-[work in progress]
-
-Files hierarchy.
-If you're wondering were IPOL move your files in the "move" sections, or if
-your "run.sh" can't find the executable, you may want to have a better idea of
-how files are organized.
-
+- [demo-system-structure](documentation/demo-system-structure.md)
+  (work in progress)
+  Files hierarchy.
+  If you're wondering were IPOL move your files in the "move" sections, or if
+  your "run.sh" can't find the executable, you may want to have a better idea
+  of how files are organized.
 

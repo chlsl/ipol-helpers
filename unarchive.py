@@ -119,7 +119,7 @@ def cli():
     a = p.parse_args()
 
     accepted_formats = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.tif',
-                        '.tiff']
+                        '.tiff', '.asc', '.pgm']
 
     files = get_from_archive(archive=a.archive,
                              accepted_formats=accepted_formats,
