@@ -15,9 +15,14 @@ def guess_file_extension(file):
     Returns:
         ext (str): guessed file extension (with leading ".")
     """
-
-    import magic
     import mimetypes
+    try:
+        import magic
+    except ImportError:
+        print('Missing python library "magic". '
+              'Install with "python -m pip install python-magic".',
+              file=sys.stderr)
+        raise
 
     m = magic.from_file(file, mime=True)
     ext = mimetypes.guess_extension(m)
@@ -35,6 +40,7 @@ def guess_file_extension(file):
 
 
 def get_from_archive(archive,
+                     archive_original_name=None,
                      accepted_formats=['.tif', '.tiff'],
                      extract_dir='unpacked',
                      rename=False):
@@ -43,6 +49,9 @@ def get_from_archive(archive,
 
     Args:
         archive: (str) archive path. Archives without extensions are handled.
+        archive_original_name: (str) original archive path, with the correct
+        extension. If provided, this file's extension will be used if the input
+        archive has no extension (or if it's a fake extension). Default is None
         accepted_formats: (list/tuple of str) list of accepted formats. It is
                 better (but not mandatory) to include the leading dot.
                 Comparison is case insensitive, so only the lowercase (or
@@ -55,18 +64,19 @@ def get_from_archive(archive,
     Returns:
         list of paths of the files found
     """
-
     assert os.path.exists(archive), f'The file {archive} does not exist.'
 
-    ext = os.path.splitext(archive)[1]
+    ext = os.path.splitext(archive)[1]  # empty string if no extension
 
     if ext == '.whatever' or ext == '.data': ext = None  # ipol's fake ext
 
     if not ext:  # the archive has no extension
-        ext = guess_file_extension(archive)
+        if archive_original_name is not None:
+            ext = os.path.splitext(archive_original_name)[1]
+        if not ext:  # if still not ext even after looking at original name
+            ext = guess_file_extension(archive)
         shutil.copyfile(archive, 'tmp' + ext)
         archive = 'tmp' + ext
-        print(f'Guessed file extension: {ext}')
 
     shutil.unpack_archive(archive, extract_dir=extract_dir)
 
@@ -97,10 +107,7 @@ def get_from_archive(archive,
 
 
 def cli():
-    """
-    Command line interface
-    """
-
+    """Command line interface"""
     import argparse
 
     note = 'The archive can be in one of the following archive formats: '
@@ -110,11 +117,14 @@ def cli():
     p = argparse.ArgumentParser(description='Unarchive for IPOL demos. ' + note)
     p.add_argument('archive',
                    help="path to the archive")
+    p.add_argument('--archive-orig',
+                   help='original archive name, used to get correct extension',
+                   type=str, default=None)
     p.add_argument('--rename',
                    action='store_true', default=False,
                    help="rename files with spaces etc.")
     p.add_argument('--extract-dir',
-                    help="directory in which to extract the archive")
+                   help="directory in which to extract the archive")
 
     a = p.parse_args()
 
@@ -122,6 +132,7 @@ def cli():
                         '.tiff', '.asc', '.pgm']
 
     files = get_from_archive(archive=a.archive,
+                             archive_original_name=a.archive_orig,
                              accepted_formats=accepted_formats,
                              rename=a.rename)
 
